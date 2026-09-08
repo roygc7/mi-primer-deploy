@@ -1,0 +1,108 @@
+    html, body {
+      margin: 0;
+      height: 100%;
+      height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, #87ceeb, #d6f3ff);
+      font-family: 'Trebuchet MS', Arial, sans-serif;
+      overflow: hidden;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #game-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(1px, 0.6vh, 4px);
+      user-select: none;
+      width: 100%;
+      height: 100%;
+      padding: 4px 0;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      margin: 0;
+      color: #2d2d6b;
+      font-size: clamp(1rem, 4.5vw, 1.8rem);
+      text-shadow: 1px 1px 0 #fff;
+      text-align: center;
+    }
+
+    .instructions {
+      margin: 0;
+      color: #3d3d5c;
+      font-size: clamp(0.7rem, 2.6vw, 0.95rem);
+      text-align: center;
+      padding: 0 10px;
+    }
+
+    #score {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: clamp(0.9rem, 3.4vw, 1.3rem);
+      font-weight: bold;
+      color: #fff;
+      background: rgba(45, 45, 107, 0.55);
+      padding: 4px 12px;
+      border-radius: 999px;
+      z-index: 2;
+    }
+
+    #canvas-holder {
+      position: relative;
+      line-height: 0;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+      width: 100%;
+    }
+
+    canvas {
+      background: linear-gradient(180deg, #bdeeff 0%, #eafff0 68%, #8fd67a 68%, #8fd67a 100%);
+      border: 4px solid #4b3f72;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      cursor: pointer;
+      touch-action: manipulation;
+      display: block;
+    }
+
+    #gameover {
+      position: absolute;
+      inset: 0;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: rgba(20, 15, 40, 0.6);
+      color: #fff;
+      border-radius: 12px;
+      text-align: center;
+      padding: 0 16px;
+    }
+
+    #gameover h2 {
+      margin: 0;
+      font-size: clamp(1.2rem, 5vw, 1.6rem);
+      color: #ffd166;
+    }
+
+    #gameover p {
+      margin: 0;
+      font-size: clamp(0.8rem, 3vw, 0.95rem);
+    }
+
+    #gameover:not(.hidden) {
+      display: flex;
+    }
+
+    .hidden {
+      display: none;
+    }
