@@ -3,6 +3,12 @@
     const scoreEl = document.getElementById('score');
     const gameoverEl = document.getElementById('gameover');
     const finalScoreEl = document.getElementById('finalScore');
+    const gameoverControls = document.getElementById('gameoverControls');
+    const playerNameInput = document.getElementById('playerNameInput');
+    const saveScoreBtn = document.getElementById('saveScoreBtn');
+    const saveScoreMsg = document.getElementById('saveScoreMsg');
+
+    const SCORES_KEY = 'gameScores';
 
     const LOGICAL_W = 380;
     const LOGICAL_H = 640;
@@ -64,8 +70,54 @@
       gameOver = false;
       gameoverEl.classList.add('hidden');
       updateScore();
+      saveScoreBtn.disabled = false;
+      playerNameInput.disabled = false;
+      saveScoreMsg.classList.add('hidden');
+      saveScoreMsg.textContent = '';
       requestAnimationFrame(loop);
     }
+
+    function saveScore() {
+      const name = playerNameInput.value.trim();
+      if (!name) {
+        saveScoreMsg.textContent = 'Ingresá tu nombre para guardar el puntaje.';
+        saveScoreMsg.classList.remove('hidden');
+        return;
+      }
+
+      let scores = [];
+      try {
+        const raw = localStorage.getItem(SCORES_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        if (Array.isArray(parsed)) scores = parsed;
+      } catch (e) {
+        scores = [];
+      }
+
+      scores.push({
+        id: Date.now() + '-' + Math.random().toString(36).slice(2),
+        name,
+        score,
+      });
+      localStorage.setItem(SCORES_KEY, JSON.stringify(scores));
+
+      saveScoreMsg.textContent = '¡Puntaje guardado!';
+      saveScoreMsg.classList.remove('hidden');
+      saveScoreBtn.disabled = true;
+      playerNameInput.disabled = true;
+    }
+
+    gameoverControls.addEventListener('mousedown', e => e.stopPropagation());
+    gameoverControls.addEventListener('touchstart', e => e.stopPropagation());
+    gameoverControls.addEventListener('keydown', e => e.stopPropagation());
+
+    saveScoreBtn.addEventListener('click', saveScore);
+    playerNameInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        saveScore();
+      }
+    });
 
     function updateScore() {
       scoreEl.textContent = `Puntos: ${score}`;
