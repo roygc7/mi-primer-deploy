@@ -282,12 +282,81 @@
     font-size: 1rem;
     opacity: 0.9;
   }
+
+  /* ── Sky switcher ───────────────────────────── */
+  html, body {
+    transition: background 1.4s ease;
+  }
+
+  body.sky-dawn {
+    background: linear-gradient(180deg, #ffb7b2, #fad0c4 40%, #ffecd2);
+  }
+
+  body.sky-sunset {
+    background: linear-gradient(180deg, #b83200, #e0541b 22%, #c471ed 68%, #7f3b8e);
+  }
+
+  body.sky-night {
+    background:
+      radial-gradient(circle, rgba(255,255,255,0.85) 1px, transparent 1px) 12%  8% / 180px 180px,
+      radial-gradient(circle, rgba(255,255,255,0.55) 1px, transparent 1px) 55% 18% / 260px 260px,
+      radial-gradient(circle, rgba(255,255,255,0.70) 1px, transparent 1px) 80%  5% / 140px 140px,
+      radial-gradient(circle, rgba(255,255,255,0.40) 1px, transparent 1px) 30% 35% / 220px 220px,
+      linear-gradient(180deg, #060614, #0d0d2b 55%, #1e1e4a);
+  }
+
+  .sky-switcher {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+
+  .sky-btn {
+    align-self: auto;
+    padding: 8px 18px;
+    border-radius: 24px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.28);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    font-size: 0.82rem;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text);
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.12s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .sky-btn:hover {
+    background: rgba(255, 255, 255, 0.5);
+    border-color: rgba(255, 255, 255, 0.7);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  }
+
+  .sky-btn:active {
+    transform: scale(0.96);
+  }
+
+  .sky-btn.active {
+    background: rgba(255, 255, 255, 0.65);
+    border-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  }
 </style>
 </head>
 <body>
   <div class="page">
     <h1>🏆 Tracker de Puntajes</h1>
     <p class="subtitle">Registrá los mejores puntajes de tu juego</p>
+
+    <div class="sky-switcher" role="group" aria-label="Ambiente del cielo">
+      <button class="sky-btn" data-sky="dawn"  id="btn-dawn">🌅 Amanecer</button>
+      <button class="sky-btn" data-sky="sunset" id="btn-sunset">🌇 Atardecer</button>
+      <button class="sky-btn" data-sky="night"  id="btn-night">🌃 Anochecer</button>
+    </div>
 
     <div class="card record-card" id="record-card" hidden>
       <p class="record-label">Récord actual</p>
@@ -433,6 +502,22 @@
     saveScores([]);
     render();
   });
+
+  // ── Sky switcher ───────────────────────────────────────────
+  const SKY_KEY   = 'skyMode';
+  const SKY_CLASS = { dawn: 'sky-dawn', sunset: 'sky-sunset', night: 'sky-night' };
+  const skyBtns   = document.querySelectorAll('.sky-btn');
+
+  function setSky(mode) {
+    Object.values(SKY_CLASS).forEach(cls => document.body.classList.remove(cls));
+    document.body.classList.add(SKY_CLASS[mode] || SKY_CLASS.dawn);
+    skyBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.sky === mode));
+    localStorage.setItem(SKY_KEY, mode);
+  }
+
+  skyBtns.forEach(btn => btn.addEventListener('click', () => setSky(btn.dataset.sky)));
+  setSky(localStorage.getItem(SKY_KEY) || 'dawn');
+  // ────────────────────────────────────────────────────────────
 
   render();
 </script>
